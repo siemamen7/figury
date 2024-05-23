@@ -1,0 +1,1 @@
+Projekt na Grafikę, jeden kwadrat i jeden sześciokąt w WebGL, oprócz tego przycisk zmieniający kolor trójkąta.
