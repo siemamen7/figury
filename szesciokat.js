@@ -20,10 +20,11 @@ const fragmentShaderTxt = `
         gl_FragColor = vec4(fragColor, 1.0);
     }
 `
+let colorBuffer, gl, program;
 const Square = function() {
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById("main-canvas");
-    const gl = canvas.getContext("webgl");
+    gl = canvas.getContext("webgl");
     let canvasColor = [0.4, 0.6, 0.7];
 
     checkGl(gl);
@@ -40,7 +41,7 @@ const Square = function() {
     gl.compileShader(fragmentShader);
 
     checkShaderCompile(gl, vertexShader);
-    const program = gl.createProgram();
+    program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
 
@@ -71,16 +72,7 @@ const Square = function() {
         // domykamy pętelke
         -0.5, 0
     ];
-    const colors = [
-        0.0, 0.0, 0.0,
-        1.0, 0.0, 0.0,
-        0.0, 1.0, 0.0,
-        0.0, 0.0, 1.0,
-        1.0, 1.0, 0.0,
-        1.0, 0.0, 1.0,
-        0.0, 1.0, 1.0,
-        1.0, 1.0, 1.0,
-    ];
+    const colors = generateRandomColors(8);
 
     const squareVertBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, squareVertBuffer);
@@ -97,7 +89,7 @@ const Square = function() {
     );
     gl.enableVertexAttribArray(posAttribLocation);
 
-    const colorBuffer = gl.createBuffer();
+    colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
@@ -113,8 +105,26 @@ const Square = function() {
     gl.enableVertexAttribArray(colorAttribLocation);
 
     gl.useProgram(program);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 8)
+    redrawHex();
 }
+function redrawHex() {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 8);
+}
+
+function generateRandomColors(numColors) {
+    const colors = [];
+    for (let i = 0; i < numColors; i++) {
+        colors.push(Math.random(), Math.random(), Math.random());
+    }
+    return colors;
+}
+document.getElementById("button").addEventListener("click", () => {
+    const newColors = generateRandomColors(8);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(newColors), gl.STATIC_DRAW);
+    redrawHex();
+})
 
 function checkGl(gl) {
     if (!gl) {console.log('WebGL not supported, use another browser');}
