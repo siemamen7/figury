@@ -3,9 +3,31 @@
   <head>
     <meta charset="utf-8" />
     <title>Szesciokat</title>
+    <style>
+        #button {
+          position: absolute;
+          top: 120px;
+          left: 110px;
+          padding: 20px 40px;
+          font-size: 20px;
+          background-color: #a21f08;
+          color: white;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+  
+        /* Optional: Add some hover effect */
+        #button:hover {
+          background-color: #ae6053; /* Darker background on hover */
+        }
+        #button:active {
+            background-color: #64180a;
+        }
+      </style>
   </head>
   <body onload="Square();">
     <canvas id="main-canvas" width="800" height="800"></canvas>
+    <button id="button">Zmień kolor</button>
   </body>
   <script src="szesciokat.js"></script>
 </html>
